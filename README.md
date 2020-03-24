@@ -7,6 +7,6 @@ apt install python
 apt install git
 git clone https://github.com/KANG-NEWBIE/lk21-dl
 cd lk21-dl
-python -m pip install requests tqdm bs4
+python -m pip install requests click tqdm bs4
 ```
 <b>Usage:</b> ```python lk21.py```
