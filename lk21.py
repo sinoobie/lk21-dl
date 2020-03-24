@@ -1,8 +1,14 @@
-import requests,re,os,json,click,sys
+import requests,re,os,json,click,sys,logging
 from bs4 import BeautifulSoup as Bs
 from tqdm import tqdm
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
 
+logging.basicConfig(level=logging.INFO)
 ses=requests.Session()
+retries = Retry(total=5, backoff_factor=1, status_forcelist=[ 502, 503, 504, 103 ])
+ses.mount('http://', HTTPAdapter(max_retries=retries))
+ses.mount('https://', HTTPAdapter(max_retries=retries))
 info={
 	'title':[],
 }
@@ -104,12 +110,14 @@ def downld2(url,judul):
 	r = ses.get(url, stream=True)
 	total_size = int(r.headers.get('content-length', 0))
 	print(f"\n# Downloading {judul}")
+	print(f"['{url}']")
 	block_size = 1024
 	t=tqdm(total=total_size, unit='iB', unit_scale=True)
 	with open(f'result/{judul.replace("/",",")}.mp4','wb') as f:
-		for data in r.iter_content(block_size):
-			t.update(len(data))
-			f.write(data)
+		for data in r.iter_content(chunk_size=block_size):
+			if data:
+				t.update(len(data))
+				f.write(data)
 	t.close()
 	if total_size != 0 and t.n != total_size:
 		print("\n[Warn] Download GAGAL")
@@ -118,6 +126,7 @@ def downld2(url,judul):
 			click.launch(info['title'][pil-1][1])
 		else:
 			sys.exit("okay bye bye:*")
+	print('\n[OK] File saved in result\n')
 
 if __name__ == "__main__":
 	os.system('clear')
@@ -132,6 +141,5 @@ if __name__ == "__main__":
 	try:
 		que=input("query search: ")
 		search(que)
-		print("\n[OK] file saved in result\n")
 	except Exception as Err:
 		print(Err)
