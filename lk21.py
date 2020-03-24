@@ -89,7 +89,7 @@ def bypass(url,judul):
 		print("index out of ranges")
 		return True
 
-	downld2(js['data'][lih-1]['file'], judul)
+	downld2(js['data'][lih-1]['file'], f"{judul} {js['data'][lih-1]['label']}")
 
 def downld2(url,judul):
 	r = ses.get(url, stream=True)
