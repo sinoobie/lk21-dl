@@ -8,6 +8,7 @@ info={
 }
 
 def search(query):
+	global pil
 	c=1
 	req=ses.get('http://149.56.24.226/?s='+query)
 	bs=Bs(req.text, 'html.parser')
@@ -69,8 +70,8 @@ def bypass(url,judul):
 	try:
 		rg3=re.findall(r'https://layarkacaxxi.org/f/(.*?)"',req5.text)[0]
 	except:
-		print("\n !Failed to bypass\n[?] Ingin melanjutkannya di websote LayarKaca21 (y/n) ")
-		tan=input("[?] anda ingin melanjutkannya ke website layarkaca21 (y/n) ")
+		print("\n !Failed to bypass")
+		tan=input("[?] Anda ingin melanjutkannya ke website layarkaca21 (y/n) ")
 		if tan.lower() == 'y':
 			click.launch(info['title'][pil-1][1])
 		else:
@@ -132,5 +133,5 @@ if __name__ == "__main__":
 		que=input("query search: ")
 		search(que)
 		print("\n[OK] file saved in result\n")
-	except Exceptiona as Err:
+	except Exception as Err:
 		print(Err)
