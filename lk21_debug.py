@@ -1,9 +1,10 @@
-import requests,re,os,json,click,sys
+import requests,re,os,json,click,sys,logging
 from bs4 import BeautifulSoup as Bs
 from tqdm import tqdm
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 
+logging.basicConfig(level=logging.DEBUG)
 ses=requests.Session()
 retries = Retry(total=5, backoff_factor=1, status_forcelist=[ 502, 503, 504, 103 ])
 ses.mount('http://', HTTPAdapter(max_retries=retries))
